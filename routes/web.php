@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AssetRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/assets/export', [AssetController::class, 'export'])->name('assets.export');
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
         Route::get('/maintenances', [MaintenanceController::class, 'index'])->name('maintenances.index');
+        
+        // Halaman daftar pengajuan (untuk semua role)
+        Route::get('/asset-requests', [AssetRequestController::class, 'index'])->name('asset-requests.index');
     });
 
     Route::middleware('role:admin,staff')->group(function () {
@@ -34,6 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('transactions', TransactionController::class)->except(['index', 'show']);
         Route::resource('maintenances', MaintenanceController::class)->except(['index', 'show']);
+
+        // Form dan simpan pengajuan (untuk staff dan admin)
+        Route::get('/asset-requests/create', [AssetRequestController::class, 'create'])->name('asset-requests.create');
+        Route::post('/asset-requests', [AssetRequestController::class, 'store'])->name('asset-requests.store');
     });
 
     Route::middleware('role:admin,pimpinan')->group(function () {
@@ -41,6 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/reports/activity', [ReportController::class, 'activity'])->name('reports.activity');
         Route::get('/reports/audit-logs', [ReportController::class, 'auditLogs'])->name('reports.audit-logs');
         Route::get('/reports/summary/export', [ReportController::class, 'exportSummary'])->name('reports.summary.export');
+        
+        // Aksi ACC dan Tolak (hanya untuk Pimpinan dan Admin)
+        Route::patch('/asset-requests/{assetRequest}/approve', [AssetRequestController::class, 'approve'])->name('asset-requests.approve');
+        Route::patch('/asset-requests/{assetRequest}/reject', [AssetRequestController::class, 'reject'])->name('asset-requests.reject');
     });
 
     Route::middleware('role:admin')->group(function () {

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Plan Sprint 1-3 : Assetera</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--primary);
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .sprint-section {
+            margin-bottom: 50px;
+        }
+
+        .sprint-title {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sprint-title h2 {
+            margin: 0;
+            font-size: 1.4em;
+        }
+
+        .sprint-focus {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: #334155;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.05em;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .role-fe {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-be {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .role-fs {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #ef4444;
+        }
+
+        .file-list {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 0.9em;
+            color: #475569;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .sprint-section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Master Plan: Proyek Assetera</h1>
+            <p>Distribusi Tugas Tim Pengembang (Sprint 1 - 3)</p>
+        </div>
+
+        <!-- SPRINT 1 -->
+        <div class="sprint-section">
+            <div class="sprint-title">
+                <h2>🚀 SPRINT 1: Fondasi CRUD & Master Layout</h2>
+            </div>
+            <div class="sprint-focus">
+                <strong>Fokus:</strong> Menyiapkan kerangka UI utama, sistem Autentikasi, Hak Akses Dasar, dan fitur
+                CRUD untuk entitas utama.
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="15%">Nama</th>
+                        <th width="10%">Role</th>
+                        <th width="45%">Detail Tugas</th>
+                        <th width="30%">Target File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Adhima</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Slicing Layout Master & Auth:</strong> Mengatur Sidebar/Navbar dinamis & halaman
+                            Login/Register.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>config/adminlte.php</code></li>
+                                <li><code>resources/views/layouts/</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adella</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Slicing Halaman Master Aset:</strong> Membuat tabel daftar aset (Index) & form
+                            tambah aset (Create).</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../assets/index.blade.php</code></li>
+                                <li><code>.../assets/create.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Faizan</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Slicing Halaman Transaksi:</strong> Tabel riwayat peminjaman & form pinjam/kembali
+                            barang.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../transactions/index.blade.php</code></li>
+                                <li><code>.../transactions/create.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rizqi</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Slicing Halaman Laporan:</strong> Kerangka halaman ringkasan aset, aktivitas, dan
+                            Audit Log.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../reports/summary.blade.php</code></li>
+                                <li><code>.../reports/activity.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sayfuddin</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Slicing UI Dashboard:</strong> Widget Statistic Box & Chart angka dummy di halaman
+                            utama.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../dashboard.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alamsyah</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Migration & Controller:</strong> Membuat tabel <code>asset_requests</code> &
+                            RequestController.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>RequestController.php</code></li>
+                                <li><code>database/migrations/...</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alfan</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Middleware & Relasi:</strong> Filter otorisasi & merapikan relasi Eloquent model.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>EnsureUserHasRole.php</code></li>
+                                <li><code>app/Models/User.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Airlangga</strong></td>
+                        <td><span class="role-badge role-fs">FS</span></td>
+                        <td><strong>Routing & Global Error:</strong> Grup Route web/API & Exception Handler untuk Error
+                            404/403.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>routes/web.php</code></li>
+                                <li><code>bootstrap/app.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SPRINT 2 -->
+        <div class="sprint-section">
+            <div class="sprint-title">
+                <h2>⚙️ SPRINT 2: Sistem Pengajuan & Approval</h2>
+            </div>
+            <div class="sprint-focus">
+                <strong>Fokus:</strong> Fitur bisnis pengajuan barang oleh Staff dan persetujuan (ACC/Tolak) oleh
+                Pimpinan.
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="15%">Nama</th>
+                        <th width="10%">Role</th>
+                        <th width="45%">Detail Tugas</th>
+                        <th width="30%">Target File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Adhima</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Form Pengajuan Staff:</strong> Halaman formulir pengajuan aset baru.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../asset-requests/create.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adella</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Integrasi Form:</strong> Menyambungkan form ke rute backend (POST) & validasi error.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../asset-requests/create.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Faizan</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Tabel Approval Pimpinan:</strong> Antrean pengajuan & Pop-up Modal konfirmasi.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../asset-requests/index.blade.php</code></li>
+                                <li><code>.../approval-modal.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rizqi</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Integrasi ACC/Tolak:</strong> Menyambungkan tombol Modal ke rute backend
+                            Approve/Reject.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../asset-requests/index.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sayfuddin</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Histori Pengajuan:</strong> Halaman pelacakan status permintaan khusus Staff.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../asset-requests/history.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alamsyah</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Logic Approval (ACC):</strong> Jika di-ACC, otomatis menambah data ke tabel assets.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>RequestController.php</code></li>
+                                <li><code>routes/web.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alfan</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Logic Reject & Notif:</strong> Simpan alasan penolakan ke DB & memicu notifikasi.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>RequestController.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Airlangga</strong></td>
+                        <td><span class="role-badge role-fs">FS</span></td>
+                        <td><strong>SweetAlert Notification:</strong> Pasang library SweetAlert2 untuk animasi
+                            sukses/gagal.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>resources/views/layouts/</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SPRINT 3 -->
+        <div class="sprint-section">
+            <div class="sprint-title">
+                <h2>📊 SPRINT 3: Laporan, Export & Demo</h2>
+            </div>
+            <div class="sprint-focus">
+                <strong>Fokus:</strong> Pencetakan laporan, penyaringan data (Filter), Bug Fixing, dan Seeding data
+                massal.
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="15%">Nama</th>
+                        <th width="10%">Role</th>
+                        <th width="45%">Detail Tugas</th>
+                        <th width="30%">Target File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Adhima</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>UI Filter Form:</strong> Form pencarian rentang waktu & kategori di laporan.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../reports/summary.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adella</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Integrasi Filter:</strong> Pastikan form pakai method GET & retain state value.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../reports/summary.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Faizan</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Tombol Export:</strong> Tombol Unduh PDF & halaman HTML polos khusus cetak.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>.../reports/print-pdf.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rizqi</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Bug Fixing UI:</strong> Mengecek typo, pesan error, dan indikator form wajib isi.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li>Semua file <code>.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sayfuddin</strong></td>
+                        <td><span class="role-badge role-fe">FE</span></td>
+                        <td><strong>Bug Fixing Responsive:</strong> Tambah class table-responsive agar rapi di HP.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li>Semua file <code>.blade.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alamsyah</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Library DomPDF & Excel:</strong> Instalasi package & fungsi convert HTML to
+                            PDF/XLSX.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>ReportController.php</code></li>
+                                <li><code>composer.json</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alfan</strong></td>
+                        <td><span class="role-badge role-be">BE</span></td>
+                        <td><strong>Logic Query Filter:</strong> Modifikasi query database membaca parameter tanggal.
+                        </td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>ReportController.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Airlangga</strong></td>
+                        <td><span class="role-badge role-fs">FS</span></td>
+                        <td><strong>Seeder Massal:</strong> Generate ratusan data tiruan agar grafik penuh saat
+                            presentasi.</td>
+                        <td>
+                            <ul class="file-list">
+                                <li><code>DatabaseSeeder.php</code></li>
+                                <li><code>AssetFactory.php</code></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>

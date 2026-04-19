@@ -324,6 +324,11 @@ return [
             'model' => \App\Models\Asset::class,
         ],
         [
+            'text' => 'Pengajuan Aset',
+            'route' => 'asset-requests.index',
+            'icon' => 'fas fa-fw fa-hand-holding-usd',
+        ],
+        [
             'text' => 'Pengadaan Aset',
             'route' => 'assets.create',
             'icon' => 'fas fa-fw fa-clipboard-list',
