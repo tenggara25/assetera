@@ -8,6 +8,7 @@
 @section('plugins.Sweetalert2', true)
 
 @section('content')
+    <x-flash-message />
     @php
         $statusLabel = static fn (?string $s) => match ($s) {
             'available' => 'Tersedia',
@@ -127,7 +128,7 @@
             </div>
         </form>
 
-        <div class="assetera-table-wrap">
+        <div class="assetera-table-wrap table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -232,16 +233,6 @@
                 });
             });
         });
-
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: @json(session('success')),
-                timer: 1800,
-                showConfirmButton: false,
-            });
-        @endif
 
         @if ($errors->has('asset'))
             Swal.fire({

@@ -33,14 +33,14 @@
                 @endif
 
                 <div class="form-row">
-                    <div class="form-group col-md-6"><label>Nama</label><input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}"></div>
-                    <div class="form-group col-md-6"><label>Username</label><input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}"></div>
+                    <div class="form-group col-md-6"><label>Nama <span class="text-danger">*</span></label><input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required></div>
+                    <div class="form-group col-md-6"><label>Username <span class="text-danger">*</span></label><input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}" required></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6"><label>Email</label><input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}"></div>
+                    <div class="form-group col-md-6"><label>Email <span class="text-danger">*</span></label><input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required></div>
                     <div class="form-group col-md-6">
-                        <label>Role</label>
-                        <select name="role" class="form-control">
+                        <label>Role <span class="text-danger">*</span></label>
+                        <select name="role" class="form-control" required>
                             <option value="admin" @selected(old('role', $user->role) === 'admin')>Admin</option>
                             <option value="pimpinan" @selected(old('role', $user->role) === 'pimpinan')>Pimpinan</option>
                             <option value="staff" @selected(old('role', $user->role) === 'staff')>Staff</option>

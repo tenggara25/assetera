@@ -52,5 +52,14 @@ class DatabaseSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ]
         );
+
+        $this->command->info('Creating 50 Assets...');
+        \App\Models\Asset::factory(50)->create();
+        
+        $this->command->info('Creating 30 Transactions...');
+        \App\Models\Transaction::factory(30)->create();
+        
+        $this->command->info('Creating 15 Maintenances...');
+        \App\Models\Maintenance::factory(15)->create();
     }
 }

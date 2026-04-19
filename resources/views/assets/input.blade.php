@@ -42,18 +42,18 @@
                     <h3>Informasi Utama</h3>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="code_asset">Kode Aset</label>
-                            <input type="text" class="form-control input-pill" id="code_asset" name="code_asset" value="{{ old('code_asset', $asset->code_asset) }}" placeholder="AST-2026-XXXX">
+                            <label for="code_asset">Kode Aset <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control input-pill" id="code_asset" name="code_asset" value="{{ old('code_asset', $asset->code_asset) }}" placeholder="AST-2026-XXXX" required>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="name_asset">Nama Aset</label>
-                            <input type="text" class="form-control input-pill" id="name_asset" name="name_asset" value="{{ old('name_asset', $asset->name_asset) }}" placeholder="Masukkan nama aset">
+                            <label for="name_asset">Nama Aset <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control input-pill" id="name_asset" name="name_asset" value="{{ old('name_asset', $asset->name_asset) }}" placeholder="Masukkan nama aset" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="category_asset">Kategori</label>
-                            <input type="text" class="form-control input-pill" id="category_asset" name="category_asset" value="{{ old('category_asset', $asset->category_asset) }}">
+                            <label for="category_asset">Kategori <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control input-pill" id="category_asset" name="category_asset" value="{{ old('category_asset', $asset->category_asset) }}" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="merk_asset">Merk</label>
@@ -74,8 +74,8 @@
                             <input type="text" class="form-control input-pill" id="kondisi_asset" name="kondisi_asset" value="{{ old('kondisi_asset', $asset->kondisi_asset) }}">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="status_asset">Status</label>
-                            <select id="status_asset" name="status_asset" class="form-control input-pill">
+                            <label for="status_asset">Status <span class="text-danger">*</span></label>
+                            <select id="status_asset" name="status_asset" class="form-control input-pill" required>
                                 <option value="available" @selected(old('status_asset', $asset->status_asset) === 'available')>Tersedia</option>
                                 <option value="borrowed" @selected(old('status_asset', $asset->status_asset) === 'borrowed')>Dipinjam</option>
                                 <option value="damaged" @selected(old('status_asset', $asset->status_asset) === 'damaged')>Rusak</option>

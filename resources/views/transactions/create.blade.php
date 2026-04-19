@@ -30,8 +30,8 @@
                         <section class="group-section">
                             <h3><i class="fas fa-user mr-2"></i>Data Peminjam</h3>
                             <div class="form-group">
-                                <label for="user_id">Nama Peminjam</label>
-                                <select id="user_id" name="user_id" class="form-control input-pill">
+                                <label for="user_id">Nama Peminjam <span class="text-danger">*</span></label>
+                                <select id="user_id" name="user_id" class="form-control input-pill" required>
                                     <option value="">Pilih user</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}" @selected(old('user_id') == $user->id)>{{ $user->name }}</option>
@@ -53,8 +53,8 @@
                         <section class="group-section">
                             <h3><i class="fas fa-laptop-house mr-2"></i>Data Asset</h3>
                             <div class="form-group">
-                                <label for="asset_id">Pilih Asset</label>
-                                <select id="asset_id" name="asset_id" class="form-control input-pill">
+                                <label for="asset_id">Pilih Asset <span class="text-danger">*</span></label>
+                                <select id="asset_id" name="asset_id" class="form-control input-pill" required>
                                     <option value="">Contoh: Blender</option>
                                     @foreach ($assets as $asset)
                                         <option value="{{ $asset->id }}" @selected(old('asset_id') == $asset->id)>
@@ -87,8 +87,8 @@
                             <h3><i class="far fa-calendar-alt mr-2"></i>Detail Peminjaman</h3>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="borrowed_at">Tanggal Pinjam</label>
-                                    <input type="date" id="borrowed_at" name="borrowed_at" class="form-control input-pill" value="{{ old('borrowed_at') }}">
+                                    <label for="borrowed_at">Tanggal Pinjam <span class="text-danger">*</span></label>
+                                    <input type="date" id="borrowed_at" name="borrowed_at" class="form-control input-pill" value="{{ old('borrowed_at') }}" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="returned_at">Tanggal Kembali</label>

@@ -11,6 +11,7 @@
 @stop
 
 @section('content')
+    <x-flash-message />
     <div class="dashboard-wrapper">
         <div class="hero-banner">
             <div>
@@ -480,16 +481,6 @@
                 });
             });
         });
-
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: @json(session('success')),
-                timer: 1800,
-                showConfirmButton: false,
-            });
-        @endif
 
         @if ($errors->has('asset'))
             Swal.fire({

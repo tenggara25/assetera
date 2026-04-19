@@ -18,6 +18,7 @@
 @stop
 
 @section('content')
+    <x-flash-message />
     <div class="row">
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
@@ -48,14 +49,6 @@
             </div>
         </div>
     </div>
-
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if ($errors->has('user'))
-        <div class="alert alert-danger">{{ $errors->first('user') }}</div>
-    @endif
 
     <div class="card card-outline card-primary">
         <div class="card-header border-0">

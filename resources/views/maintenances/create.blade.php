@@ -34,8 +34,8 @@
                             <h3>Informasi Aset</h3>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="asset_id">Kode Aset</label>
-                                    <select id="asset_id" name="asset_id" class="form-control input-pill">
+                                    <label for="asset_id">Kode Aset <span class="text-danger">*</span></label>
+                                    <select id="asset_id" name="asset_id" class="form-control input-pill" required>
                                         <option value="">Contoh: AST-C225</option>
                                         @foreach ($assets as $asset)
                                             <option value="{{ $asset->id }}" @selected(old('asset_id') == $asset->id)>
@@ -65,8 +65,8 @@
                             <h3>Detail Kerusakan</h3>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="checkin_date">Tanggal Masuk Service</label>
-                                    <input type="date" id="checkin_date" name="checkin_date" class="form-control input-pill" value="{{ old('checkin_date') }}">
+                                    <label for="checkin_date">Tanggal Masuk Service <span class="text-danger">*</span></label>
+                                    <input type="date" id="checkin_date" name="checkin_date" class="form-control input-pill" value="{{ old('checkin_date') }}" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="condition_now">Kondisi Saat Ini</label>
@@ -92,8 +92,8 @@
                                 </div>
                             </div>
                             <div class="form-group mb-0">
-                                <label for="status">Status Service</label>
-                                <select id="status" name="status" class="form-control input-pill">
+                                <label for="status">Status Service <span class="text-danger">*</span></label>
+                                <select id="status" name="status" class="form-control input-pill" required>
                                     <option value="">Contoh: In Progress</option>
                                     <option value="pending" @selected(old('status') === 'pending')>Pending</option>
                                     <option value="in_progress" @selected(old('status') === 'in_progress')>In Progress</option>

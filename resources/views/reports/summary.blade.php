@@ -37,6 +37,32 @@
                     </a>
                 </div>
             </div>
+            
+            <hr>
+            
+            <form method="GET" action="{{ route('reports.summary') }}" class="form-inline mt-3">
+                <div class="form-group mr-3 mb-2">
+                    <label for="start_date" class="mr-2">Dari:</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" value="{{ request('start_date') }}">
+                </div>
+                <div class="form-group mr-3 mb-2">
+                    <label for="end_date" class="mr-2">Sampai:</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control form-control-sm" value="{{ request('end_date') }}">
+                </div>
+                <div class="form-group mr-3 mb-2">
+                    <label for="category_asset" class="mr-2">Kategori:</label>
+                    <select name="category_asset" id="category_asset" class="form-control form-control-sm">
+                        <option value="">Semua Kategori</option>
+                        <option value="Elektronik" {{ request('category_asset') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
+                        <option value="Peralatan" {{ request('category_asset') == 'Peralatan' ? 'selected' : '' }}>Peralatan</option>
+                        <option value="Furnitur" {{ request('category_asset') == 'Furnitur' ? 'selected' : '' }}>Furnitur</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary mb-2"><i class="fas fa-filter"></i> Filter</button>
+                @if(request('start_date') || request('end_date') || request('category_asset'))
+                    <a href="{{ route('reports.summary') }}" class="btn btn-sm btn-default mb-2 ml-2"><i class="fas fa-sync-alt"></i> Reset</a>
+                @endif
+            </form>
         </div>
     </div>
 
@@ -132,9 +158,17 @@
         <div class="card-header border-0">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="card-title">Ringkasan Statistik</h3>
-                <a href="{{ route('reports.summary.export') }}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-file-export mr-1"></i> Export CSV
-                </a>
+                <div>
+                    <a href="{{ route('reports.summary.export.pdf', request()->all()) }}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-file-pdf mr-1"></i> Unduh PDF
+                    </a>
+                    <a href="{{ route('reports.summary.export.excel', request()->all()) }}" class="btn btn-sm btn-success mx-1">
+                        <i class="fas fa-file-excel mr-1"></i> Unduh Excel
+                    </a>
+                    <a href="{{ route('reports.summary.export', request()->all()) }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-file-csv mr-1"></i> Export CSV
+                    </a>
+                </div>
             </div>
         </div>
         <div class="card-body">

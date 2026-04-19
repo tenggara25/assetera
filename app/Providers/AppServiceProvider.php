@@ -34,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(User::class, UserPolicy::class);
         Gate::define('view-reports', [\App\Policies\ReportPolicy::class, 'view']);
         Gate::define('export-reports', [\App\Policies\ReportPolicy::class, 'export']);
+        Gate::define('staff-only', fn($u) => $u->role === 'staff');
+        Gate::define('admin-pimpinan-only', fn($u) => in_array($u->role, ['admin', 'pimpinan']));
     }
 }

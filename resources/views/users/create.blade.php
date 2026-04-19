@@ -32,14 +32,14 @@
                 @endif
 
                 <div class="form-row">
-                    <div class="form-group col-md-6"><label>Nama</label><input type="text" name="name" class="form-control" value="{{ old('name') }}"></div>
-                    <div class="form-group col-md-6"><label>Username</label><input type="text" name="username" class="form-control" value="{{ old('username') }}"></div>
+                    <div class="form-group col-md-6"><label>Nama <span class="text-danger">*</span></label><input type="text" name="name" class="form-control" value="{{ old('name') }}" required></div>
+                    <div class="form-group col-md-6"><label>Username <span class="text-danger">*</span></label><input type="text" name="username" class="form-control" value="{{ old('username') }}" required></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6"><label>Email</label><input type="email" name="email" class="form-control" value="{{ old('email') }}"></div>
+                    <div class="form-group col-md-6"><label>Email <span class="text-danger">*</span></label><input type="email" name="email" class="form-control" value="{{ old('email') }}" required></div>
                     <div class="form-group col-md-6">
-                        <label>Role</label>
-                        <select name="role" class="form-control">
+                        <label>Role <span class="text-danger">*</span></label>
+                        <select name="role" class="form-control" required>
                             <option value="admin" @selected(old('role') === 'admin')>Admin</option>
                             <option value="pimpinan" @selected(old('role') === 'pimpinan')>Pimpinan</option>
                             <option value="staff" @selected(old('role') === 'staff')>Staff</option>
@@ -47,8 +47,8 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6"><label>Password</label><input type="password" name="password" class="form-control"></div>
-                    <div class="form-group col-md-6"><label>Konfirmasi Password</label><input type="password" name="password_confirmation" class="form-control"></div>
+                    <div class="form-group col-md-6"><label>Password <span class="text-danger">*</span></label><input type="password" name="password" class="form-control" required></div>
+                    <div class="form-group col-md-6"><label>Konfirmasi Password <span class="text-danger">*</span></label><input type="password" name="password_confirmation" class="form-control" required></div>
                 </div>
             </div>
             <div class="card-footer text-right">

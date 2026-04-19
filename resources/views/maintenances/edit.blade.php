@@ -37,8 +37,8 @@
                 @endif
 
                 <div class="form-group">
-                    <label>Asset</label>
-                    <select name="asset_id" class="form-control">
+                    <label>Asset <span class="text-danger">*</span></label>
+                    <select name="asset_id" class="form-control" required>
                         @foreach ($assets as $asset)
                             <option value="{{ $asset->id }}" @selected(old('asset_id', $maintenance->asset_id) == $asset->id)>{{ $asset->name_asset }} ({{ $asset->code_asset }})</option>
                         @endforeach
@@ -50,8 +50,8 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label>Status</label>
-                        <select name="status" class="form-control">
+                        <label>Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-control" required>
                             <option value="pending" @selected(old('status', $maintenance->status) === 'pending')>Pending</option>
                             <option value="in_progress" @selected(old('status', $maintenance->status) === 'in_progress')>In Progress</option>
                             <option value="completed" @selected(old('status', $maintenance->status) === 'completed')>Completed</option>

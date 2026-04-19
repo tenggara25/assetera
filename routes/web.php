@@ -25,6 +25,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/maintenances', [MaintenanceController::class, 'index'])->name('maintenances.index');
         
         // Halaman daftar pengajuan (untuk semua role)
+        // Note: For staff, they will use history route. For admin/pimpinan, they will use index.
+    });
+
+    Route::middleware('role:admin,pimpinan')->group(function () {
         Route::get('/asset-requests', [AssetRequestController::class, 'index'])->name('asset-requests.index');
     });
 
@@ -42,12 +46,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Form dan simpan pengajuan (untuk staff dan admin)
         Route::get('/asset-requests/create', [AssetRequestController::class, 'create'])->name('asset-requests.create');
         Route::post('/asset-requests', [AssetRequestController::class, 'store'])->name('asset-requests.store');
+        Route::get('/asset-requests/history', [AssetRequestController::class, 'history'])->name('asset-requests.history');
     });
 
     Route::middleware('role:admin,pimpinan')->group(function () {
         Route::get('/reports/summary', [ReportController::class, 'summary'])->name('reports.summary');
         Route::get('/reports/activity', [ReportController::class, 'activity'])->name('reports.activity');
         Route::get('/reports/audit-logs', [ReportController::class, 'auditLogs'])->name('reports.audit-logs');
+        Route::get('/reports/summary/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.summary.export.pdf');
+        Route::get('/reports/summary/export/excel', [ReportController::class, 'exportExcel'])->name('reports.summary.export.excel');
         Route::get('/reports/summary/export', [ReportController::class, 'exportSummary'])->name('reports.summary.export');
         
         // Aksi ACC dan Tolak (hanya untuk Pimpinan dan Admin)

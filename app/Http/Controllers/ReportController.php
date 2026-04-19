@@ -25,30 +25,47 @@ class ReportController extends Controller
     {
         $this->authorize('view-reports');
 
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $category = $request->input('category_asset');
+
+        // Apply filters conditionally via a closure
+        $applyDateFilter = function ($query) use ($startDate, $endDate, $category) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate))
+                  ->when($category, fn($q) => $q->where('category_asset', $category));
+        };
+
+        // For transactions, we might want to filter by borrowed_at as well, but created_at is fine for a general filter.
+        $applyTransactionDateFilter = function ($query) use ($startDate, $endDate) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate));
+        };
+
         $summary = [
             'assets' => [
-                'total' => Asset::count(),
-                'available' => Asset::where('status_asset', Asset::STATUS_AVAILABLE)->count(),
-                'borrowed' => Asset::where('status_asset', Asset::STATUS_BORROWED)->count(),
-                'damaged' => Asset::where('status_asset', Asset::STATUS_DAMAGED)->count(),
+                'total' => Asset::where($applyDateFilter)->count(),
+                'available' => Asset::where('status_asset', Asset::STATUS_AVAILABLE)->where($applyDateFilter)->count(),
+                'borrowed' => Asset::where('status_asset', Asset::STATUS_BORROWED)->where($applyDateFilter)->count(),
+                'damaged' => Asset::where('status_asset', Asset::STATUS_DAMAGED)->where($applyDateFilter)->count(),
             ],
             'transactions' => [
-                'total' => Transaction::count(),
-                'active' => Transaction::active()->count(),
-                'returned' => Transaction::whereNotNull('returned_at')->count(),
-                'total_cost' => (float) Transaction::sum('cost'),
+                'total' => Transaction::where($applyTransactionDateFilter)->count(),
+                'active' => Transaction::active()->where($applyTransactionDateFilter)->count(),
+                'returned' => Transaction::whereNotNull('returned_at')->where($applyTransactionDateFilter)->count(),
+                'total_cost' => (float) Transaction::where($applyTransactionDateFilter)->sum('cost'),
             ],
             'maintenances' => [
-                'total' => Maintenance::count(),
-                'open' => Maintenance::open()->count(),
-                'completed' => Maintenance::where('status', Maintenance::STATUS_COMPLETED)->count(),
-                'total_cost' => (float) Maintenance::sum('cost'),
+                'total' => Maintenance::where($applyDateFilter)->count(),
+                'open' => Maintenance::open()->where($applyDateFilter)->count(),
+                'completed' => Maintenance::where('status', Maintenance::STATUS_COMPLETED)->where($applyDateFilter)->count(),
+                'total_cost' => (float) Maintenance::where($applyDateFilter)->sum('cost'),
             ],
             'users' => [
-                'total' => User::count(),
-                'admin' => User::where('role', User::ROLE_ADMIN)->count(),
-                'pimpinan' => User::where('role', User::ROLE_PIMPINAN)->count(),
-                'staff' => User::where('role', User::ROLE_STAFF)->count(),
+                'total' => User::where($applyDateFilter)->count(),
+                'admin' => User::where('role', User::ROLE_ADMIN)->where($applyDateFilter)->count(),
+                'pimpinan' => User::where('role', User::ROLE_PIMPINAN)->where($applyDateFilter)->count(),
+                'staff' => User::where('role', User::ROLE_STAFF)->where($applyDateFilter)->count(),
             ],
         ];
 
@@ -59,21 +76,25 @@ class ReportController extends Controller
         return view('reports.summary', [
             'summary' => $summary,
             'recentAssets' => Asset::query()
+                ->where($applyDateFilter)
                 ->latest()
                 ->take(5)
                 ->get(['id', 'code_asset', 'name_asset', 'category_asset', 'status_asset', 'created_at']),
             'recentTransactions' => Transaction::query()
+                ->where($applyTransactionDateFilter)
                 ->with(['user:id,name', 'asset:id,code_asset,name_asset'])
                 ->latest()
                 ->take(5)
                 ->get(['id', 'user_id', 'asset_id', 'borrowed_at', 'returned_at', 'cost', 'created_at']),
             'recentMaintenances' => Maintenance::query()
+                ->where($applyDateFilter)
                 ->with(['asset:id,code_asset,name_asset'])
                 ->latest()
                 ->take(5)
                 ->get(['id', 'asset_id', 'repair_description', 'status', 'cost', 'created_at']),
             'recentAuditLogs' => Schema::hasTable('audit_logs')
                 ? AuditLog::query()
+                    ->where($applyDateFilter)
                     ->with('user:id,name')
                     ->latest()
                     ->take(5)
@@ -122,32 +143,12 @@ class ReportController extends Controller
 
     public function exportSummary(Request $request): StreamedResponse
     {
-        $this->authorize('export-reports');
-
-        $summary = [
-            ['Kategori', 'Metrik', 'Nilai'],
-            ['Assets', 'Total', Asset::count()],
-            ['Assets', 'Available', Asset::where('status_asset', Asset::STATUS_AVAILABLE)->count()],
-            ['Assets', 'Borrowed', Asset::where('status_asset', Asset::STATUS_BORROWED)->count()],
-            ['Assets', 'Damaged', Asset::where('status_asset', Asset::STATUS_DAMAGED)->count()],
-            ['Transactions', 'Total', Transaction::count()],
-            ['Transactions', 'Active', Transaction::active()->count()],
-            ['Transactions', 'Returned', Transaction::whereNotNull('returned_at')->count()],
-            ['Transactions', 'Total Cost', (float) Transaction::sum('cost')],
-            ['Maintenances', 'Total', Maintenance::count()],
-            ['Maintenances', 'Open', Maintenance::open()->count()],
-            ['Maintenances', 'Completed', Maintenance::where('status', Maintenance::STATUS_COMPLETED)->count()],
-            ['Maintenances', 'Total Cost', (float) Maintenance::sum('cost')],
-            ['Users', 'Total', User::count()],
-            ['Users', 'Admin', User::where('role', User::ROLE_ADMIN)->count()],
-            ['Users', 'Pimpinan', User::where('role', User::ROLE_PIMPINAN)->count()],
-            ['Users', 'Staff', User::where('role', User::ROLE_STAFF)->count()],
-        ];
+        $summary = $this->getSummaryDataForExport($request);
 
         $this->auditLogService->record(
             $request->user(),
             'report.summary.exported',
-            'Mengekspor ringkasan laporan',
+            'Mengekspor ringkasan laporan CSV',
             null,
             ['rows' => count($summary) - 1]
         );
@@ -163,5 +164,114 @@ class ReportController extends Controller
         }, 'summary-report.csv', [
             'Content-Type' => 'text/csv',
         ]);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $this->authorize('export-reports');
+        
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $category = $request->input('category_asset');
+
+        // Apply filters conditionally via a closure
+        $applyDateFilter = function ($query) use ($startDate, $endDate, $category) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate))
+                  ->when($category, fn($q) => $q->where('category_asset', $category));
+        };
+
+        $applyTransactionDateFilter = function ($query) use ($startDate, $endDate) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate));
+        };
+
+        $summary = [
+            'assets' => [
+                'total' => Asset::where($applyDateFilter)->count(),
+                'available' => Asset::where('status_asset', Asset::STATUS_AVAILABLE)->where($applyDateFilter)->count(),
+                'borrowed' => Asset::where('status_asset', Asset::STATUS_BORROWED)->where($applyDateFilter)->count(),
+                'damaged' => Asset::where('status_asset', Asset::STATUS_DAMAGED)->where($applyDateFilter)->count(),
+            ],
+            'transactions' => [
+                'total' => Transaction::where($applyTransactionDateFilter)->count(),
+                'active' => Transaction::active()->where($applyTransactionDateFilter)->count(),
+                'returned' => Transaction::whereNotNull('returned_at')->where($applyTransactionDateFilter)->count(),
+                'total_cost' => (float) Transaction::where($applyTransactionDateFilter)->sum('cost'),
+            ],
+            'maintenances' => [
+                'total' => Maintenance::where($applyDateFilter)->count(),
+                'open' => Maintenance::open()->where($applyDateFilter)->count(),
+                'completed' => Maintenance::where('status', Maintenance::STATUS_COMPLETED)->where($applyDateFilter)->count(),
+                'total_cost' => (float) Maintenance::where($applyDateFilter)->sum('cost'),
+            ]
+        ];
+
+        $this->auditLogService->record(
+            $request->user(),
+            'report.summary.exported',
+            'Mengekspor ringkasan laporan PDF',
+            null,
+            []
+        );
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('reports.print-pdf', compact('summary'));
+        return $pdf->download('summary-report.pdf');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $summary = $this->getSummaryDataForExport($request);
+
+        $this->auditLogService->record(
+            $request->user(),
+            'report.summary.exported',
+            'Mengekspor ringkasan laporan Excel',
+            null,
+            ['rows' => count($summary) - 1]
+        );
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\SummaryExport($summary), 'summary-report.xlsx');
+    }
+
+    private function getSummaryDataForExport(Request $request)
+    {
+        $this->authorize('export-reports');
+        
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $category = $request->input('category_asset');
+
+        // Apply filters conditionally via a closure
+        $applyDateFilter = function ($query) use ($startDate, $endDate, $category) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate))
+                  ->when($category, fn($q) => $q->where('category_asset', $category));
+        };
+
+        $applyTransactionDateFilter = function ($query) use ($startDate, $endDate) {
+            $query->when($startDate, fn($q) => $q->whereDate('created_at', '>=', $startDate))
+                  ->when($endDate, fn($q) => $q->whereDate('created_at', '<=', $endDate));
+        };
+
+        return [
+            ['Kategori', 'Metrik', 'Nilai'],
+            ['Assets', 'Total', Asset::where($applyDateFilter)->count()],
+            ['Assets', 'Available', Asset::where('status_asset', Asset::STATUS_AVAILABLE)->where($applyDateFilter)->count()],
+            ['Assets', 'Borrowed', Asset::where('status_asset', Asset::STATUS_BORROWED)->where($applyDateFilter)->count()],
+            ['Assets', 'Damaged', Asset::where('status_asset', Asset::STATUS_DAMAGED)->where($applyDateFilter)->count()],
+            ['Transactions', 'Total', Transaction::where($applyTransactionDateFilter)->count()],
+            ['Transactions', 'Active', Transaction::active()->where($applyTransactionDateFilter)->count()],
+            ['Transactions', 'Returned', Transaction::whereNotNull('returned_at')->where($applyTransactionDateFilter)->count()],
+            ['Transactions', 'Total Cost', (float) Transaction::where($applyTransactionDateFilter)->sum('cost')],
+            ['Maintenances', 'Total', Maintenance::where($applyDateFilter)->count()],
+            ['Maintenances', 'Open', Maintenance::open()->where($applyDateFilter)->count()],
+            ['Maintenances', 'Completed', Maintenance::where('status', Maintenance::STATUS_COMPLETED)->where($applyDateFilter)->count()],
+            ['Maintenances', 'Total Cost', (float) Maintenance::where($applyDateFilter)->sum('cost')],
+            ['Users', 'Total', User::where($applyDateFilter)->count()],
+            ['Users', 'Admin', User::where('role', User::ROLE_ADMIN)->where($applyDateFilter)->count()],
+            ['Users', 'Pimpinan', User::where('role', User::ROLE_PIMPINAN)->where($applyDateFilter)->count()],
+            ['Users', 'Staff', User::where('role', User::ROLE_STAFF)->where($applyDateFilter)->count()],
+        ];
     }
 }

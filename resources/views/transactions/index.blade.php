@@ -19,6 +19,7 @@
 @stop
 
 @section('content')
+    <x-flash-message />
     <div class="borrow-page">
         <div class="row">
             <div class="col-lg-3 col-sm-6 mb-3">

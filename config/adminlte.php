@@ -327,6 +327,13 @@ return [
             'text' => 'Pengajuan Aset',
             'route' => 'asset-requests.index',
             'icon' => 'fas fa-fw fa-hand-holding-usd',
+            'can' => 'admin-pimpinan-only',
+        ],
+        [
+            'text' => 'Riwayat Pengajuan',
+            'route' => 'asset-requests.history',
+            'icon' => 'fas fa-fw fa-history',
+            'can' => 'staff-only',
         ],
         [
             'text' => 'Pengadaan Aset',
@@ -446,7 +453,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

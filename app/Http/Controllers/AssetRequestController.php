@@ -12,16 +12,17 @@ class AssetRequestController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-        
-        if ($user->role === 'staff') {
-            $requests = AssetRequest::where('user_id', $user->id)->latest()->get();
-        } else {
-            // Admin and Pimpinan can see all requests
-            $requests = AssetRequest::with('user')->latest()->get();
-        }
+        $requests = AssetRequest::with('user')->latest()->get();
 
         return view('asset-requests.index', compact('requests'));
+    }
+
+    public function history()
+    {
+        $user = Auth::user();
+        $requests = AssetRequest::where('user_id', $user->id)->latest()->get();
+
+        return view('asset-requests.history', compact('requests'));
     }
 
     public function create()
@@ -89,6 +90,10 @@ class AssetRequestController extends Controller
             'status' => AssetRequest::STATUS_REJECTED,
             'reject_reason' => $request->reject_reason
         ]);
+
+        if ($assetRequest->user) {
+            $assetRequest->user->notify(new \App\Notifications\RequestRejected($assetRequest));
+        }
 
         return back()->with('success', 'Pengajuan aset telah ditolak.');
     }
